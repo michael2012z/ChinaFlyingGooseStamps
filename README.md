@@ -1,4 +1,10 @@
-ChinaCoilingDragonStamps
-========================
+HTML5 Muffin chocchip steps
+============================
 
-An online book of China coiling dragon stamps (Waterlow issue).
+Run bundle install
+
+	bundle install
+
+Run jekyll
+
+	jekyll
