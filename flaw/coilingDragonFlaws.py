@@ -22,7 +22,7 @@ def markFlawSerial(imageDraw, x, y, serial):
     font = ImageFont.truetype("arial.ttf", 18)
     imageDraw.arc([x-r, y-r, x+r, y+r], 0, 360, "white")
     textSizeW, textSizeH = font.getsize(str(serial))
-    print textSizeW, textSizeH
+    #print textSizeW, textSizeH
     imageDraw.text([x-int(textSizeW/2), y-int(textSizeH/2)-4], str(serial), font=font)
 
 def markFlawPoint(imageDraw, x, y, serial):
@@ -69,7 +69,7 @@ def generateModels(name):
     f = open("statistic/statistic_" + name + "_.txt")
     lines = f.readlines()
     for line in lines:
-        print line
+        #print line
         if line.find(":") >= 0:
             # this is a new file
             # release existing things
