@@ -76,7 +76,7 @@ def generateModels(name):
     stampID = 0
     serial = 0
 
-    f = open("statistic/statistic_" + name + "_.txt")
+    f = open("statistic/statistic_" + name + ".txt")
     lines = f.readlines()
     for line in lines:
         #print line
