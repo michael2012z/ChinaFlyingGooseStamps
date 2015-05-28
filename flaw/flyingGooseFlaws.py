@@ -66,6 +66,15 @@ def normalize(x1, y1, x2=0, y2=0):
     yy2 = float(y2)/51 * imageHeight
     return xx1, yy1, xx2, yy2
 
+
+'''
+$ comments start with $
+$ stamp start with %
+$ flaw start with #
+$ text start with &
+$ flaw description follows |
+'''
+
 def generateModels(name):
     im = None
     imS = None
@@ -79,10 +88,7 @@ def generateModels(name):
     f = open("statistic/statistic_" + name + ".txt")
     lines = f.readlines()
     for line in lines:
-        #print line
-        if line.find(":") >= 0:
-            # this is a new file
-            # release existing things
+        if line == "":
             if im <> None:
                 im.save('model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '.png', 'png')
                 tmpW, tmpH = imS.size
@@ -92,10 +98,13 @@ def generateModels(name):
                 imS.save('model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '_s.png', 'png')
                 im = None
                 draw = None
+        elif line[0] == "$":
+            # this line is comments
+            print "[comments:]" + line[1:]
+        elif line[0] == "%":
+            # this line is new stamp index
             # setup new ctxt
-            stampID = line.split(":")[0]
-            if stampID == '':
-                return
+            stampID = line[1:]
             stampID = int(stampID)
             im = Image.open('model/model_' + name + '.png')
             imS = Image.open('model/model_' + name + '.png')
@@ -103,24 +112,32 @@ def generateModels(name):
             drawS = ImageDraw.Draw(imS)
             serial = 0
             print "stamp: " + str(stampID)
-        if line.find("-") >= 0:
-            # this is a line flaw
+        elif line[0] == "#":
+            # this line is flaw 
+            coord = line[1:].split("|")[0]
+            desc = line[1:].split("|")[1]
             serial += 1
-            x1, y1 = line.split("-")[0].split(",")[0], line.split("-")[0].split(",")[1]
-            x2, y2 = line.split("-")[1].split(",")[0], line.split("-")[1].split(",")[1]
-            x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
-            markFlawLine(draw, x1, y1, x2, y2, serial)
-            markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
-            print "line: " + str([x1, y1, x2, y2])
-        elif line.find(",") >= 0:
-            # this is a dot flaw
-            serial += 1
-            x, y = line.split(",")[0], line.split(",")[1]
-            x, y, XXX, YYY = normalize(x, y)
-            markFlawPoint(draw, x, y, serial)
-            markFlawPointS(drawS, x, y)
-            print "dot: " + str([x, y])
-            
+            if coord.find("-") >= 0:
+                # this is a line:
+                 x1, y1 = coord.split("-")[0].split(",")[0], coord.split("-")[0].split(",")[1]
+                 x2, y2 = coord.split("-")[1].split(",")[0], coord.split("-")[1].split(",")[1]
+                 x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
+                 markFlawLine(draw, x1, y1, x2, y2, serial)
+                 markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
+                 print "line: " + str([x1, y1, x2, y2]) + ": " + desc
+            else:
+                # this is a dot
+                x, y = coord.split(",")[0], coord.split(",")[1]
+                x, y, XXX, YYY = normalize(x, y)
+                markFlawPoint(draw, x, y, serial)
+                markFlawPointS(drawS, x, y)
+                print "dot: " + str([x, y]) + ": " + desc
+        elif line[0] == "&":
+            # this line is text
+            print "[text]: " + line
+        else:
+            print "[unknown]: " + line
+
     f.close()
 
 
