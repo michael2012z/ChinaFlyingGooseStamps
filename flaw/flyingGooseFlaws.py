@@ -1,5 +1,7 @@
 import Image, ImageDraw, ImageFont
 
+stampWidth = 1.0 + 20.0 + 1.0
+stampHeight = 1.0 + 23.5 + 1.0
 imageWidth = 577
 imageHeight = 668
 # radius of serial-number circle
@@ -66,6 +68,10 @@ def normalize(x1, y1, x2=0, y2=0):
     yy2 = float(y2)/51 * imageHeight
     return xx1, yy1, xx2, yy2
 
+def physicalLocation(x, y):
+    xx = float(x)/imageWidth * stampWidth
+    yy = float(y)/imageHeight * stampHeight
+    return round(xx, 2), round(yy, 2)
 
 '''
 $ comments start with $
@@ -124,14 +130,17 @@ def generateModels(name):
                  x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
                  markFlawLine(draw, x1, y1, x2, y2, serial)
                  markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
-                 print "line: " + str([x1, y1, x2, y2]) + ": " + desc
+                 x1InStamp, y1InStamp = physicalLocation(x1, y1)
+                 x2InStamp, y2InStamp = physicalLocation(x2, y2)
+                 print "line: " + str([x1InStamp, y1InStamp, x2InStamp, y2InStamp]) + ": " + desc
             else:
                 # this is a dot
                 x, y = coord.split(",")[0], coord.split(",")[1]
                 x, y, XXX, YYY = normalize(x, y)
                 markFlawPoint(draw, x, y, serial)
                 markFlawPointS(drawS, x, y)
-                print "dot: " + str([x, y]) + ": " + desc
+                xInStamp, yInStamp = physicalLocation(x, y)
+                print "dot: " + str([xInStamp, yInStamp]) + ": " + desc
         elif line[0] == "&":
             # this line is text
             print "[text]: " + line
