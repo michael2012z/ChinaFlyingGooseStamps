@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import Image, ImageDraw, ImageFont
 
 stampWidth = 1.0 + 20.0 + 1.0
@@ -81,7 +82,9 @@ $ text start with &
 $ flaw description follows |
 '''
 
-def generateModels(name):
+# pageInfo structure: [ id, title, [big picture, small picture], text, [flaw list, ...], [case list, ...]]
+
+def generateModels(name, nameC):
     im = None
     imS = None
     draw = None
@@ -90,20 +93,32 @@ def generateModels(name):
     drawS = None
     stampID = 0
     serial = 0
+    pageInfoList = []
+    pageInfo = None
+    text = ''
+    flawList = []
+    caseList = []
 
     f = open("statistic/statistic_" + name + ".txt")
     lines = f.readlines()
     for line in lines:
+        line = line.strip()
         if line == "":
             if im <> None:
-                im.save('model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '.png', 'png')
+                im.save(pageInfo[2][0], 'png')
                 tmpW, tmpH = imS.size
                 tmpW /= 2
                 tmpH /= 2
                 imS = imS.resize((tmpW, tmpH), Image.ANTIALIAS)
-                imS.save('model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '_s.png', 'png')
+                imS.save(pageInfo[2][1], 'png')
+                pageInfo.append(text)
+                pageInfo.append(flawList)
+                pageInfo.append(caseList)
                 im = None
                 draw = None
+                pageInfo = None
+                text = ''
+                flawList = []
         elif line[0] == "$":
             # this line is comments
             print "[comments:]" + line[1:]
@@ -117,6 +132,11 @@ def generateModels(name):
             draw = ImageDraw.Draw(im)
             drawS = ImageDraw.Draw(imS)
             serial = 0
+            pageInfo = []
+            pageInfoList.append(pageInfo)
+            pageInfo.append(stampID)
+            pageInfo.append("大清飞雁" + nameC + "邮票印刷缺陷" + " (#" + str(stampID) + ")")
+            pageInfo.append(['model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '.png', 'model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '_s.png'])
             print "stamp: " + str(stampID)
         elif line[0] == "#":
             # this line is flaw 
@@ -125,14 +145,15 @@ def generateModels(name):
             serial += 1
             if coord.find("-") >= 0:
                 # this is a line:
-                 x1, y1 = coord.split("-")[0].split(",")[0], coord.split("-")[0].split(",")[1]
-                 x2, y2 = coord.split("-")[1].split(",")[0], coord.split("-")[1].split(",")[1]
-                 x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
-                 markFlawLine(draw, x1, y1, x2, y2, serial)
-                 markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
-                 x1InStamp, y1InStamp = physicalLocation(x1, y1)
-                 x2InStamp, y2InStamp = physicalLocation(x2, y2)
-                 print "line: " + str([x1InStamp, y1InStamp, x2InStamp, y2InStamp]) + ": " + desc
+                x1, y1 = coord.split("-")[0].split(",")[0], coord.split("-")[0].split(",")[1]
+                x2, y2 = coord.split("-")[1].split(",")[0], coord.split("-")[1].split(",")[1]
+                x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
+                markFlawLine(draw, x1, y1, x2, y2, serial)
+                markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
+                x1InStamp, y1InStamp = physicalLocation(x1, y1)
+                x2InStamp, y2InStamp = physicalLocation(x2, y2)
+                flawList.append([[x1InStamp, y1InStamp, x2InStamp, y2InStamp], desc])
+                print "line: " + str([x1InStamp, y1InStamp, x2InStamp, y2InStamp]) + ": " + desc
             else:
                 # this is a dot
                 x, y = coord.split(",")[0], coord.split(",")[1]
@@ -140,17 +161,104 @@ def generateModels(name):
                 markFlawPoint(draw, x, y, serial)
                 markFlawPointS(drawS, x, y)
                 xInStamp, yInStamp = physicalLocation(x, y)
+                flawList.append([[xInStamp, yInStamp], desc])
                 print "dot: " + str([xInStamp, yInStamp]) + ": " + desc
         elif line[0] == "&":
             # this line is text
+            text += line
             print "[text]: " + line
         else:
             print "[unknown]: " + line
 
     f.close()
 
+    flawUrlBase = 'https://raw.githubusercontent.com/michael2012z/ChinaFlyingGooseStamps/master/flaw/'
 
-generateModels("1d")
+    # now generate pages
+    for pageInfo in pageInfoList:
+        stampID = pageInfo[0]
+        print pageInfo
+        pageText = '''
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<title> 
+'''
+        pageText += pageInfo[1]
+        pageText += ''' </title>
+	</head>
+'''
+        pageText += '<body>\n'
+
+        pageText += '<h1>' + pageInfo[1] + '</h1>\n'
+
+        pageText += '<h2>' + '模型' + '</h2>\n'
+        pageText += '<center><img src='
+        pageText += "\"" + flawUrlBase + pageInfo[2][0] + "\"" + " width=\"420\""
+        pageText += '/></center>\n'
+        pageText += '<h2>' + '缺陷列表' + '</h2>\n'
+        pageText += pageInfo[3] + '\n'
+        pageText += '<ol>\n'
+        for flawItem in pageInfo[4]:
+            if len(flawItem[0]) == 2:
+                coord = "(" + str(flawItem[0][0]) + "mm, " + str(flawItem[0][1]) + "mm)"
+            elif len(flawItem[0]) == 4:
+                coord = "(" + str(flawItem[0][0]) + "mm, " + str(flawItem[0][1]) + "mm) - "
+                coord += "(" + str(flawItem[0][2]) + "mm, " + str(flawItem[0][3]) + "mm)"
+            else:
+                print "error"
+                return
+            pageText += '<li>\n'
+            pageText += coord + " : " + flawItem[1]
+            pageText += '</li>\n'
+        pageText += '</ol>\n'
+        pageText += '<h2>' + '实例' + '</h2>\n'
+        for casePic in pageInfo[5]:
+            pageText += '<center><img src='
+            pageText += "\"" + flawUrlBase + casePic + "\""
+            pageText += '/></center>\n'
+        pageText += '''
+        </body>
+</html>'''
+        f = open("pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html', 'w')
+        f.write(pageText)
+        f.close()
+        
+    # now generate index content
+    pageText = '''
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<title> 
+'''
+    pageText += "TEST"
+    pageText += ''' </title>
+	</head>
+'''
+    pageText += '<body>\n'
+    pageText += '<center>\n'
+    for i in range(0, 6):
+        pageText += '<div style="line-height:0">'
+        for j in range(0, 8):
+            pageText += '<a target="_blank" href='
+            pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html'
+            pageText += '><img width="120" src='
+            pageText += flawUrlBase + pageInfoList[i*6+j][2][1]
+            pageText += '></a>'
+        pageText += '</div>\n'
+    pageText += '</center>\n'
+    pageText += '''
+        </body>
+</html>'''
+    f = open("pages/" + name + "/" + 'index.html', 'w')
+    f.write(pageText)
+    f.close()
+        
+
+
+generateModels("1d", "壹元")
 #generateModels("2d")
 #generateModels("5d")
 
