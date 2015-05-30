@@ -172,7 +172,7 @@ def generateModels(name, nameC):
 
     f.close()
 
-    flawUrlBase = 'https://raw.githubusercontent.com/michael2012z/ChinaFlyingGooseStamps/master/flaw/'
+    flawUrlBase = 'http://michael2012z.github.io/ChinaFlyingGooseStamps/flaw/'
 
     # now generate pages
     for pageInfo in pageInfoList:
@@ -244,7 +244,7 @@ def generateModels(name, nameC):
         for j in range(0, 8):
             pageText += '<a target="_blank" href='
             pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html'
-            pageText += '><img width="120" src='
+            pageText += '><img width="87" src='
             pageText += flawUrlBase + pageInfoList[i*6+j][2][1]
             pageText += '></a>'
         pageText += '</div>\n'
