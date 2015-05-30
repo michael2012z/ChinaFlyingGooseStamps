@@ -325,11 +325,11 @@ def generateModels(name, nameC):
     for i in range(0, 6):
         pageText += '<div style="line-height:0">'
         for j in range(0, 8):
-            stampID = pageInfoList[i*6+j][0]
+            stampID = pageInfoList[i*8+j][0]
             pageText += '<a target="_blank" href='
             pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html'
             pageText += '><img width="87" src='
-            pageText += flawUrlBase + pageInfoList[i*6+j][2][1]
+            pageText += flawUrlBase + pageInfoList[i*8+j][2][1]
             pageText += '></a>'
         pageText += '</div>\n'
     pageText += '</center>\n'
