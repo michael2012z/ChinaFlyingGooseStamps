@@ -82,7 +82,7 @@ $ text start with &
 $ flaw description follows |
 '''
 
-# pageInfo structure: [ id, title, [big picture, small picture], text, [flaw list, ...], [example list, ...]]
+# pageInfo structure: [ id, title, [big picture, small picture], text, [flaw list, ...], [case list, ...]]
 
 def generateModels(name, nameC):
     im = None
@@ -180,30 +180,73 @@ def generateModels(name, nameC):
     flawUrlBase = 'http://michael2012z.github.io/ChinaFlyingGooseStamps/flaw/'
 
     # now generate pages
-    for pageInfo in pageInfoList:
+    for i in range(0, len(pageInfoList)):
+        pageInfo = pageInfoList[i]
         stampID = pageInfo[0]
         print pageInfo
+        # page head
         pageText = '''
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title> 
-'''
+		<title> '''
         pageText += pageInfo[1]
-        pageText += ''' </title>
+        pageText += '''</title>
+		<!-- For responsive site
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<link rel="author" href="/ChinaFlyingGooseStamps/humans.txt">
+		<meta name="description" content="Description Goes Here">
+		<link rel="stylesheet" href="/ChinaFlyingGooseStamps/css/style.css">
+		<!--[if IE 7]>
+			<html class="ie7"> 
+			<link rel="stylesheet" type="text/css" href="/css/font-awesome-ie7.min.css">
+		<![endif]-->
+		<!--[if IE 8]><html class="ie8"> <![endif]-->		
+	    <!--[if lt IE 9]>
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+
+		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+		<link rel="shortcut icon" href="ico/favicon.png">	    
 	</head>
 '''
-        pageText += '<body>\n'
 
-        pageText += '<h1>' + pageInfo[1] + '</h1>\n'
+        # body
+        pageText += '''
+	<body>
+	<!-- Header
+	    ================================================== -->
+	<header>
 
-        pageText += '<h2>' + '模型' + '</h2>\n'
+	</header>
+
+	<div class="top-strip"></div>
+<main class="content">
+    <section class="container">
+    	<div class="row-fluid">
+    		<article class="home-icon">
+				<a href="/ChinaFlyingGooseStamps/">
+					<i class="icon-home"></i> 
+				</a>
+			</article>
+			<article class="post">
+                        '''
+        # title
+        pageText += '''        <h5>''' + "大清飞雁" + nameC + "邮票印刷缺陷全图" + '''</h5>'''
+	pageText += '''			<h2 class="content">'''+ pageInfo[1] + '''</h2>
+				<section>'''
+        pageText += '''<h4 id="section">模型</h4>\n'''
         pageText += '<center><img src='
         pageText += "\"" + flawUrlBase + pageInfo[2][0] + "\"" + " width=\"420\""
         pageText += '/></center>\n'
-        pageText += '<h2>' + '缺陷列表' + '</h2>\n'
-        pageText += pageInfo[3] + '\n'
+        pageText += '''<h4 id="section">缺陷列表</h4>\n'''
+        pageText += '<p>' + pageInfo[3] + '</p>\n'
         pageText += '<ol>\n'
         for flawItem in pageInfo[4]:
             if len(flawItem[0]) == 2:
@@ -218,14 +261,54 @@ def generateModels(name, nameC):
             pageText += coord + " : " + flawItem[1]
             pageText += '</li>\n'
         pageText += '</ol>\n'
-        pageText += '<h2>' + '实例' + '</h2>\n'
-        for examplePic in pageInfo[5]:
+        pageText += '''<h4 id="section">实例</h4>\n'''
+        for casePic in pageInfo[5]:
             pageText += '<center><img src='
-            pageText += "\"" + flawUrlBase + examplePic + "\""
+            pageText += "\"" + flawUrlBase + casePic + "\""
             pageText += '/></center>\n'
+
         pageText += '''
-        </body>
-</html>'''
+</section>
+				<section style="font-weight:bold; margin-bottom: 2em;">'''
+        if i > 0:
+            pageText += '''
+            <a rel="prev" class="a-hover"href="'''
+            pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str((stampID-1)/10) + str((stampID-1)%10) + '.html'
+            pageText += '''"><i class="icon-double-angle-left"></i>''' + pageInfoList[i-1][1] + '''</a>\n'''
+	if i < len(pageInfoList)-1:					
+            pageText += '''<a rel="next" style="float:right" class="a-hover"href="'''
+            pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str((stampID+1)/10) + str((stampID+1)%10) + '.html'
+            pageText += '''">''' + pageInfoList[i+1][1] + ''' <i class=" icon-double-angle-right"></i></a>
+				</section>
+			</article>
+		</div>
+	</section>
+</main>
+
+
+	<footer>
+		<div class="container">
+			Author: <a href="http://www.2ndmoon.net/">Michael Z</a>
+		</div>
+	</footer>
+
+	<!-- Footer
+	    ================================================== -->
+
+	<!-- Javascripts 
+	    ================================================= -->
+	<script src="/ChinaFlyingGooseStamps/js/jquery.min.js"></script>
+	<script src="/ChinaFlyingGooseStamps/js/custom.js"></script>
+
+    <!-- Analytics
+    ================================================== -->
+    <script>
+		// analytics code
+    </script>	
+	</body>
+</html>
+'''
+
         f = open("pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html', 'w')
         f.write(pageText)
         f.close()
@@ -247,10 +330,11 @@ def generateModels(name, nameC):
     for i in range(0, 6):
         pageText += '<div style="line-height:0">'
         for j in range(0, 8):
+            stampID = pageInfoList[i*8+j][0]
             pageText += '<a target="_blank" href='
             pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html'
             pageText += '><img width="87" src='
-            pageText += flawUrlBase + pageInfoList[i*6+j][2][1]
+            pageText += flawUrlBase + pageInfoList[i*8+j][2][1]
             pageText += '></a>'
         pageText += '</div>\n'
     pageText += '</center>\n'
