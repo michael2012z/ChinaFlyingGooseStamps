@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import Image, ImageDraw, ImageFont
+import Image, ImageDraw, ImageFont, os
 
 stampWidth = 1.0 + 20.0 + 1.0
 stampHeight = 1.0 + 23.5 + 1.0
@@ -82,7 +82,7 @@ $ text start with &
 $ flaw description follows |
 '''
 
-# pageInfo structure: [ id, title, [big picture, small picture], text, [flaw list, ...], [case list, ...]]
+# pageInfo structure: [ id, title, [big picture, small picture], text, [flaw list, ...], [example list, ...]]
 
 def generateModels(name, nameC):
     im = None
@@ -97,7 +97,6 @@ def generateModels(name, nameC):
     pageInfo = None
     text = ''
     flawList = []
-    caseList = []
 
     f = open("statistic/statistic_" + name + ".txt")
     lines = f.readlines()
@@ -113,7 +112,13 @@ def generateModels(name, nameC):
                 imS.save(pageInfo[2][1], 'png')
                 pageInfo.append(text)
                 pageInfo.append(flawList)
-                pageInfo.append(caseList)
+                exampleList = []
+                exampleDir = 'examples/' + str(stampID/10) + str(stampID%10)
+                if os.path.exists(exampleDir):
+                    tmpList = os.listdir(exampleDir)
+                    for example in tmpList:
+                        exampleList.append(exampleDir + '/' + example)
+                pageInfo.append(exampleList)
                 im = None
                 draw = None
                 pageInfo = None
@@ -214,9 +219,9 @@ def generateModels(name, nameC):
             pageText += '</li>\n'
         pageText += '</ol>\n'
         pageText += '<h2>' + '实例' + '</h2>\n'
-        for casePic in pageInfo[5]:
+        for examplePic in pageInfo[5]:
             pageText += '<center><img src='
-            pageText += "\"" + flawUrlBase + casePic + "\""
+            pageText += "\"" + flawUrlBase + examplePic + "\""
             pageText += '/></center>\n'
         pageText += '''
         </body>
