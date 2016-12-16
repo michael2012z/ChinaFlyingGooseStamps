@@ -384,18 +384,17 @@ $ |至行尾是缺陷描述
 # 2.5, 46.5 | 面值ONE左侧内外边框线之间有一点。
 
 % 42
-# 8.0, 2.5 | 政字上方内外边框间有一小点。
-# 39.0, 2.5 | 大字右上方内外边框线间有小点。
-# 40.0, 2.5 | 大字右上方内外边框线间有小点，在上点右侧，较上点淡。
-# 19.25, 7.0 | 国字左侧有一大圆点，这可能是所有壹元票的缺陷中最大的两个实心圆点之一，另一个也在此票上。
-# 8.0, 11.0 | 圆字上横内中间有小点。
-# 15.5, 16 - 16.5, 14.5 | 鸿雁颈部上方云纹内有反向斜线。
-# 23.75, 30.0 | 鸿雁的肚子下面有一个大圆点，与上述国家左边的圆点大小相当。
-# 0.5, 38.0 | 英文国铭左边外边框线外有小点，距线比较远，容易被齿孔隐藏。
-# 34.0, 43.0 | 面值DOLLAR第一个L内中上方有小点。
-# 0.5, 48.5 | 外边框线左下角左侧有小点。
-# 33.75, 42.5 | 字母L内上半部有小点。
-# 33.75, 45.5 | 字母L内下半部有模糊竖向短线，但很模糊。
+# 8.0, 2.5 | 政字上方内外边框间有一小点。| A dot between inner and outer frame, above character "政".
+# 39.0, 2.5 | 大字右上方内外边框线间有小点。| A dot between inner and outer frame to the NE of of "大".
+# 40.0, 2.5 | 大字右上方内外边框线间有小点，在上点右侧，较上点淡。| Another dot between inner and outer frame to the NE of of "大", smaller than the dot to the left.
+# 19.25, 7.0 | 国字左侧有一大圆点，这可能是所有壹元票的缺陷中最大的两个实心圆点之一，另一个也在此票上。| A big dot to the left of "国".
+# 8.0, 11.0 | 圆字上横内中间有小点。| A dot in "圆".
+# 15.5, 16 - 16.5, 14.5 | 鸿雁颈部上方云纹内有反向斜线。| A slash in the cloud, above the neck of the goose.
+# 23.75, 30.0 | 鸿雁的肚子下面有一个大圆点，与上述国家左边的圆点大小相当。| Another big dot under the abdomen of the goose.
+# 0.5, 38.0 | 英文国铭左边外边框线外有小点，距线比较远，容易被齿孔隐藏。| A dot to the left of nation name. It's far from the frame, easy to be hidden by perforation.
+# 0.5, 48.5 | 外边框线左下角左侧有小点。 | | A dot to the SW corner. It's also far from the frame, easy to be hidden by perforation.
+# 33.75, 42.5 | 字母L内上半部有小点。| A dot in the first L of "DOLLAR".
+# 33.75, 45.5 | 字母L内下半部有模糊竖向短线，但很模糊。| A short slash in the first L of "DOLLAR".
 
 % 43
 # 30.0, 0.75 | 清字正上方外边框线外有小点。
