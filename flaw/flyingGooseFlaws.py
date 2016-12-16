@@ -146,7 +146,7 @@ def generateModels(name, nameC):
         elif line[0] == "#":
             # this line is flaw 
             coord = line[1:].split("|")[0]
-            desc = line[1:].split("|")[1]
+            desc = line[1:].split("|")[-1]
             serial += 1
             if coord.find("-") >= 0:
                 # this is a line:
