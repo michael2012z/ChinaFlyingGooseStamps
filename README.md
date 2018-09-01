@@ -1,10 +1,19 @@
-HTML5 Muffin chocchip steps
-============================
+# Plan in short future:
 
-Run bundle install
+## 1. Replace all absolute reference with local ones, it will make debuging easy
 
-	bundle install
+## 2. Reorgnize folder structure:
+index.html
+flaw/
+flaw/1d
+flaw/1d/model
+flaw/2d
+flaw/5d
+tools/
+reference/
+galary/
 
-Run jekyll
+## 3. Translate to English version
 
-	jekyll
+## 4. Update download scripts
+
