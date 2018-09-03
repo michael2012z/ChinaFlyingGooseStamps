@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import Image, ImageDraw, ImageFont, os
+from PIL import Image, ImageDraw, ImageFont
+import os
 
 stampWidth = 1.0 + 20.0 + 1.0
 stampHeight = 1.0 + 23.5 + 1.0
@@ -113,7 +114,7 @@ def generateModels(name, nameC):
                 pageInfo.append(text)
                 pageInfo.append(flawList)
                 exampleList = []
-                exampleDir = 'examples/' + str(stampID/10) + str(stampID%10)
+                exampleDir = 'samples/' + str(stampID/10) + str(stampID%10)
                 if os.path.exists(exampleDir):
                     tmpList = os.listdir(exampleDir)
                     for example in tmpList:
