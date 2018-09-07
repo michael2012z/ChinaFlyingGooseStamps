@@ -222,6 +222,7 @@ def generateFlawPage(record, name, nameC):
     exampleDir = '../' + name + '/flaw/samples/' + str(stampID/10) + str(stampID%10)
     if os.path.exists(exampleDir):
         tmpList = os.listdir(exampleDir)
+        tmpList.sort()
         serial = 0
         for example in tmpList:
             examplePath = '../samples/' + str(stampID/10) + str(stampID%10) + '/' + example
@@ -285,9 +286,8 @@ if __name__ == '__main__':
     for stamp in stamps:
         allRecords = parse_statistics('../' + stamp['name'] + '/flaw/statistic/statistic_' + stamp['name'] + '.txt')
         for record in allRecords:
-            #print 'generating models ' + str(record['id'])
-            #generateModel (record, stamp['name'])
             print 'generating flaw page ' + str(record['id'])
+            generateModel (record, stamp['name'])
             generateFlawPage (record, stamp['name'], stamp['nameC'])
         print 'generating index pages'
         generateIndexPage (stamp['name'], stamp['nameC'])
