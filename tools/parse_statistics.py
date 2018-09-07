@@ -32,13 +32,14 @@ def parse_statistics (filename):
                 continue
         elif line[0] == "$":
             # this line is comments
-            print "[comments:]" + line[1:]
+            # print "[comments:]" + line[1:]
+            _ = 0
         elif line[0] == "%":
             # this line is new stamp index
             stampID = line[1:]
             stampID = int(stampID)
             record["id"] = stampID
-            print "stamp: " + str(stampID)
+            # print "stamp: " + str(stampID)
         elif line[0] == "#":
             # this line is flaw 
             coord = line[1:].split("|")[0]
@@ -48,17 +49,18 @@ def parse_statistics (filename):
                 x1, y1 = coord.split("-")[0].split(",")[0], coord.split("-")[0].split(",")[1]
                 x2, y2 = coord.split("-")[1].split(",")[0], coord.split("-")[1].split(",")[1]
                 x1, y1, x2, y2 = float(x1),float(y1),float(x2), float(y2)
-                flawList.append({"type":"dot", "x1":x1, "y1":y1, "x2":x2, "y2":y2, "desc" : desc})
-                print "line: " + str([x1, y1, x2, y2]) + ": " + desc
+                flawList.append({"type":"line", "x1":x1, "y1":y1, "x2":x2, "y2":y2, "desc" : desc})
+                # print "line: " + str([x1, y1, x2, y2]) + ": " + desc
             else:
                 # this is a dot
                 x, y = coord.split(",")[0], coord.split(",")[1]
                 x, y = float(x), float(y)
-                flawList.append({"type":"line", "x":x, "y":y, "desc": desc})
-                print "dot: " + str([x, y]) + ": " + desc
+                flawList.append({"type":"dot", "x":x, "y":y, "desc": desc})
+                # print "dot: " + str([x, y]) + ": " + desc
         elif line[0] == "&":
             # this line is text
-            print "[text]: " + line
+            # print "[text]: " + line
+            _ = 0
         else:
             print "[unknown]: " + line
 
@@ -160,158 +162,33 @@ def generateModel(record, name):
     imS = Image.open('../flaw/model/model_' + name + '.png')
     draw = ImageDraw.Draw(im)
     drawS = ImageDraw.Draw(imS)
+    serial = 0
     for flaw in record['flawlist']:
+        serial += 1
         if flaw['type'] == "dot":
+            x, y = flaw['x'], flaw['y']
             x, y, XXX, YYY = normalize(x, y)
             markFlawPoint(draw, x, y, serial)
             markFlawPointS(drawS, x, y)
         elif flaw['type'] == "line":
+            x1, y1, x2, y2 = flaw['x1'], flaw['y1'], flaw['x2'], flaw['y2']
             x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
             markFlawLine(draw, x1, y1, x2, y2, serial)
             markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
     bigPicName = '../flaw/model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '.png'
     litPicName = '../flaw/model/' + name + '/' + 'model_' + name + '_' + str(stampID/10) + str(stampID%10) + '_s.png'
-    im.save(bitPicName, 'png')
+    im.save(bigPicName, 'png')
     tmpW, tmpH = imS.size
     tmpW /= 2
     tmpH /= 2
     imS = imS.resize((tmpW, tmpH), Image.ANTIALIAS)
     imS.save(litPicName, 'png')
+    print "generated picture " + bigPicName
 
 '''-----------------------------------------------------------'''
 
     
 def generateFlawPage(record, name, nameC):
-    stampID = record['id']
-    # page head
-    pageTitle = "大清飞雁" + nameC + "邮票印刷缺陷" + " (#" + str(stampID) + ")"
-    pageText = '''
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8"/>
-		<title> '''
-        pageText += pageTitle
-        pageText += '''</title>
-		<!-- For responsive site
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		-->
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<link rel="author" href="/ChinaFlyingGooseStamps/humans.txt">
-		<meta name="description" content="Description Goes Here">
-		<link rel="stylesheet" href="/ChinaFlyingGooseStamps/css/style.css">
-		<!--[if IE 7]>
-			<html class="ie7"> 
-			<link rel="stylesheet" type="text/css" href="/css/font-awesome-ie7.min.css">
-		<![endif]-->
-		<!--[if IE 8]><html class="ie8"> <![endif]-->		
-	    <!--[if lt IE 9]>
-	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	    <![endif]-->
-
-		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
-		<link rel="shortcut icon" href="ico/favicon.png">	    
-	</head>
-'''
-
-        # body
-        pageText += '''
-	<body>
-	<!-- Header
-	    ================================================== -->
-	<header>
-
-	</header>
-
-	<div class="top-strip"></div>
-<main class="content">
-    <section class="container">
-    	<div class="row-fluid">
-    		<article class="home-icon">
-				<a href="/ChinaFlyingGooseStamps/">
-					<i class="icon-home"></i> 
-				</a>
-			</article>
-			<article class="post">
-                        '''
-        # title
-        pageText += '''        <h5>''' + "大清飞雁" + nameC + "邮票印刷缺陷全图" + '''</h5>'''
-	pageText += '''			<h2 class="content">'''+ pageTitle + '''</h2>
-				<section>'''
-        pageText += '''<h4 id="section">模型</h4>\n'''
-        pageText += '<center><img src='
-        pageText += "\"" + flawUrlBase + pageInfo[2][0] + "\"" + " width=\"420\""
-        pageText += '/></center>\n'
-        pageText += '''<h4 id="section">缺陷列表</h4>\n'''
-        pageText += '<p>' + pageInfo[3] + '</p>\n'
-        pageText += '<ol>\n'
-        for flawItem in pageInfo[4]:
-            if len(flawItem[0]) == 2:
-                coord = "(" + str(flawItem[0][0]) + "mm, " + str(flawItem[0][1]) + "mm)"
-            elif len(flawItem[0]) == 4:
-                coord = "(" + str(flawItem[0][0]) + "mm, " + str(flawItem[0][1]) + "mm) - "
-                coord += "(" + str(flawItem[0][2]) + "mm, " + str(flawItem[0][3]) + "mm)"
-            else:
-                print "error"
-                return
-            pageText += '<li>\n'
-            pageText += coord + " : " + flawItem[1]
-            pageText += '</li>\n'
-        pageText += '</ol>\n'
-        pageText += '''<h4 id="section">实例</h4>\n'''
-        for casePic in pageInfo[5]:
-            pageText += '<center><img src='
-            pageText += "\"" + flawUrlBase + casePic + "\""
-            pageText += '/></center>\n'
-
-        pageText += '''
-</section>
-				<section style="font-weight:bold; margin-bottom: 2em;">'''
-        if i > 0:
-            pageText += '''
-            <a rel="prev" class="a-hover"href="'''
-            pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str((stampID-1)/10) + str((stampID-1)%10) + '.html'
-            pageText += '''"><i class="icon-double-angle-left"></i>''' + pageInfoList[i-1][1] + '''</a>\n'''
-	if i < len(pageInfoList)-1:					
-            pageText += '''<a rel="next" style="float:right" class="a-hover"href="'''
-            pageText += flawUrlBase + "pages/" + name + "/" + 'page_' + name + '_' + str((stampID+1)/10) + str((stampID+1)%10) + '.html'
-            pageText += '''">''' + pageInfoList[i+1][1] + ''' <i class=" icon-double-angle-right"></i></a>
-				</section>
-			</article>
-		</div>
-	</section>
-</main>
-
-
-	<footer>
-		<div class="container">
-			Author: <a href="http://www.2ndmoon.net/">Michael Z</a>
-		</div>
-	</footer>
-
-	<!-- Footer
-	    ================================================== -->
-
-	<!-- Javascripts 
-	    ================================================= -->
-	<script src="/ChinaFlyingGooseStamps/js/jquery.min.js"></script>
-	<script src="/ChinaFlyingGooseStamps/js/custom.js"></script>
-
-    <!-- Analytics
-    ================================================== -->
-    <script>
-		// analytics code
-    </script>	
-	</body>
-</html>
-'''
-
-        f = open("pages/" + name + "/" + 'page_' + name + '_' + str(stampID/10) + str(stampID%10) + '.html', 'w')
-        f.write(pageText)
-        f.close()
     return
 
 
@@ -321,7 +198,12 @@ def generateIndexPage(name):
     
 
 if __name__ == '__main__':
-    allRecords = parse_statistics('../flaw/statistic/statistic_1d.txt')
-    print "======================================================="
-    print allRecords
-    
+    stamps = [
+        {'name':'1d', 'nameC':'壹元'},
+    ]
+    for stamp in stamps:
+        allRecords = parse_statistics('../flaw/statistic/statistic_' + stamp['name'] + '.txt')
+        for record in allRecords:
+            generateModel (record, stamp['name'])
+            generateFlawPage (record, stamp['name'], stamp['nameC'])
+            generateIndexPage (stamp['name'])
