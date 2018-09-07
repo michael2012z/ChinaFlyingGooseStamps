@@ -191,7 +191,7 @@ def generateModel(record, name):
 def generateFlawPage(record, name, nameC):
     stampID = record['id']
     templateFile = open('page_templates/flaw_page_template.html')
-    template = templateFile.readlines()
+    template = templateFile.read()
     templateFile.close()
     
     template = template.replace('[REPLACE_NAME_TEXT]', nameC)
@@ -222,7 +222,7 @@ def generateFlawPage(record, name, nameC):
         tmpList = os.listdir(exampleDir)
         serial = 0
         for example in tmpList:
-            examplePath = '../samples/' + example
+            examplePath = '../../samples/' + name + '/' + example
             if serial % 4 == 0:
                 exampleList += '<div>\n'
             exampleList += '<a target="_blank" href="' + examplePath + '"><img width="140" src="' + examplePath + '"></a>\n'
@@ -233,16 +233,16 @@ def generateFlawPage(record, name, nameC):
 
     # prev page
     prevID = range(1, 49)[stampID-1-1]
-    nextID = range(1, 49)[stampID-1+1]
+    nextID = range(1, 49)[(stampID-1+1)%48]
     prevPage = str(prevID) + '.html'
     nextPage = str(nextID) + '.html'
-    template = template.replace('[REPLACE_PREV_ID]', prevID)
-    template = template.replace('[REPLACE_NEXT_ID]', nextID)
+    template = template.replace('[REPLACE_PREV_ID]', str(prevID))
+    template = template.replace('[REPLACE_NEXT_ID]', str(nextID))
     template = template.replace('[REPLACE_PREV_PAGE]', prevPage)
     template = template.replace('[REPLACE_NEXT_PAGE]', nextPage)
-
+    
     # write page
-    f = open ('../flaw/pages/' + name + '/' + str(stampID) + '.html')
+    f = open ('../flaw/pages/' + name + '/' + str(stampID/10) + str(stampID%10) + '.html', 'w')
     f.write(template)
     f.close()
     
@@ -250,8 +250,8 @@ def generateFlawPage(record, name, nameC):
 
 
 def generateIndexPage(name, nameC):
-    templateFile = open('page_templates/flaw_page_template.html')
-    template = templateFile.readlines()
+    templateFile = open('page_templates/stamp_page_template.html')
+    template = templateFile.read()
     templateFile.close()
     
     template = template.replace('[REPLACE_NAME_TEXT]', nameC)
@@ -259,16 +259,16 @@ def generateIndexPage(name, nameC):
     # flaw map
     flawMap = ''
     for row in range(0, 6):
-        flawMap += '<div style="line-height:0">\n'
+        flawMap += '<div style="line-height:0">'
         for col in range(0, 8):
             stampID = row * 6 + col + 1
-            flawMap += '<a target="_blank" href="flaw/pages/' + name + '/' + str(stampID/10) + str(stampID%10) + '.html"><img width="140" src="flaw/pages/' + name + '/model_id_' + str(stampID/10) + str(stampID%10) + '_s.png' + '"></a>\n'
+            flawMap += '<a target="_blank" href="flaw/pages/' + name + '/' + str(stampID/10) + str(stampID%10) + '.html"><img width="87" src="flaw/model/' + name + '/model_' + name + '_' + str(stampID/10) + str(stampID%10) + '_s.png' + '"></a>'
         flawMap += '</div>\n'
 
     template = template.replace('[REPLACE_FLAW_MAP]', flawMap)
 
     # write page
-    f = open ('../' + name + '.html')
+    f = open ('../' + name + '.html', 'w')
     f.write(template)
     f.close()
     
@@ -278,11 +278,11 @@ def generateIndexPage(name, nameC):
 
 if __name__ == '__main__':
     stamps = [
-        {'name':'1d', 'nameC':'壹元'},
+        {'name':'1d', 'nameC':'壹圆'},
     ]
     for stamp in stamps:
         allRecords = parse_statistics('../flaw/statistic/statistic_' + stamp['name'] + '.txt')
         for record in allRecords:
-            generateModel (record, stamp['name'])
+            #generateModel (record, stamp['name'])
             generateFlawPage (record, stamp['name'], stamp['nameC'])
             generateIndexPage (stamp['name'], stamp['nameC'])
