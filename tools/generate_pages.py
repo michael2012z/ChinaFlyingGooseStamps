@@ -189,10 +189,89 @@ def generateModel(record, name):
 
     
 def generateFlawPage(record, name, nameC):
+    stampID = record['id']
+    templateFile = open('page_templates/flaw_page_template.html')
+    template = templateFile.readlines()
+    templateFile.close()
+    
+    template = template.replace('[REPLACE_NAME_TEXT]', nameC)
+    template = template.replace('[REPLACE_ID]', str(stampID))
+    
+    # flaw list
+    flawList = ""
+    for flaw in record['flawlist']:
+        location = ''
+        if flaw['type'] == "dot":
+            x, y = flaw['x'], flaw['y']
+            x, y, XXX, YYY = normalize(x, y)
+            xInStamp, yInStamp = physicalLocation(x, y)
+            location = "(" + str(xInStamp) + "mm, " + str(yInStamp) + "mm)"
+        elif flaw['type'] == "line":
+            x1, y1, x2, y2 = flaw['x1'], flaw['y1'], flaw['x2'], flaw['y2']
+            x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
+            x1InStamp, y1InStamp = physicalLocation(x1, y1)
+            x2InStamp, y2InStamp = physicalLocation(x2, y2)
+            location = "(" + str(x1InStamp) + "mm, " + str(y1InStamp) + "mm) - (" + str(x2InStamp) + "mm, " + str(y2InStamp) + "mm)"
+        flawList += "<li>" + location + " : " + flaw['desc'] + "</li>\n"
+    template = template.replace('[REPLACE_FLAW_LIST]', flawList)
+
+    # example list
+    exampleList = ''
+    exampleDir = '../flaw/samples/' + str(stampID/10) + str(stampID%10)
+    if os.path.exists(exampleDir):
+        tmpList = os.listdir(exampleDir)
+        serial = 0
+        for example in tmpList:
+            examplePath = '../samples/' + example
+            if serial % 4 == 0:
+                exampleList += '<div>\n'
+            exampleList += '<a target="_blank" href="' + examplePath + '"><img width="140" src="' + examplePath + '"></a>\n'
+            serial += 1
+            if serial % 4 == 0:
+                exampleList += '</div>\n'
+    template = template.replace('[REPLACE_EXAMPLE_LIST]', exampleList)
+
+    # prev page
+    prevID = range(1, 49)[stampID-1-1]
+    nextID = range(1, 49)[stampID-1+1]
+    prevPage = str(prevID) + '.html'
+    nextPage = str(nextID) + '.html'
+    template = template.replace('[REPLACE_PREV_ID]', prevID)
+    template = template.replace('[REPLACE_NEXT_ID]', nextID)
+    template = template.replace('[REPLACE_PREV_PAGE]', prevPage)
+    template = template.replace('[REPLACE_NEXT_PAGE]', nextPage)
+
+    # write page
+    f = open ('../flaw/pages/' + name + '/' + str(stampID) + '.html')
+    f.write(template)
+    f.close()
+    
     return
 
 
-def generateIndexPage(name):
+def generateIndexPage(name, nameC):
+    templateFile = open('page_templates/flaw_page_template.html')
+    template = templateFile.readlines()
+    templateFile.close()
+    
+    template = template.replace('[REPLACE_NAME_TEXT]', nameC)
+
+    # flaw map
+    flawMap = ''
+    for row in range(0, 6):
+        flawMap += '<div style="line-height:0">\n'
+        for col in range(0, 8):
+            stampID = row * 6 + col + 1
+            flawMap += '<a target="_blank" href="flaw/pages/' + name + '/' + str(stampID/10) + str(stampID%10) + '.html"><img width="140" src="flaw/pages/' + name + '/model_id_' + str(stampID/10) + str(stampID%10) + '_s.png' + '"></a>\n'
+        flawMap += '</div>\n'
+
+    template = template.replace('[REPLACE_FLAW_MAP]', flawMap)
+
+    # write page
+    f = open ('../' + name + '.html')
+    f.write(template)
+    f.close()
+    
     return
 
     
@@ -206,4 +285,4 @@ if __name__ == '__main__':
         for record in allRecords:
             generateModel (record, stamp['name'])
             generateFlawPage (record, stamp['name'], stamp['nameC'])
-            generateIndexPage (stamp['name'])
+            generateIndexPage (stamp['name'], stamp['nameC'])
