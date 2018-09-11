@@ -63,4 +63,5 @@ if __name__ == '__main__':
     for stamp in stamps:
         for category in categories:
             generate_lib_pages (stamp['name'], stamp['nameC'], category['category'], category['categoryC'])
+            print 'generated library page: ' + stamp['name'] + ' ' + category['category']
 

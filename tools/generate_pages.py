@@ -183,7 +183,6 @@ def generateModel(record, name):
     tmpH /= 2
     imS = imS.resize((tmpW, tmpH), Image.ANTIALIAS)
     imS.save(litPicName, 'png')
-    print "generated picture " + bigPicName
 
 '''-----------------------------------------------------------'''
 
