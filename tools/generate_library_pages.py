@@ -8,11 +8,10 @@ sys.setdefaultencoding('utf-8')
 def generate_lib_pages (name, nameC, category, categoryC):
     faceFiles = []
     categoryDir = '../' + name + '/library/' + category
-    categoryUrlDir = name + '/library/' + category
     srcDir = categoryDir + '/src/'
-    srcUrlDir = categoryUrlDir + '/src/'
+    srcUrlDir = category + '/src/'
     snpDir = categoryDir + '/m_size/'
-    snpUrlDir = categoryUrlDir + '/m_size/'
+    snpUrlDir = category + '/m_size/'
     imageFiles = os.listdir(srcDir)
     imageFiles.sort()
     for imageFile in imageFiles[::-1]:
@@ -24,10 +23,10 @@ def generate_lib_pages (name, nameC, category, categoryC):
     for faceFile in faceFiles:
 	if count % 4 == 0:
 	    pageContent += "<div>"
-	pageContent += "<a target=\"_blank\" href=\"" + baseUrl
+	pageContent += "<a target=\"_blank\" href=\""
 	pageContent += faceFile[0]
 	pageContent += "\">"
-	pageContent += "<img width=\"280\" src=\"" + baseUrl
+	pageContent += "<img width=\"160\" src=\""
 	pageContent += faceFile[1]
 	pageContent += "\"></a>"
 	if count % 4 == 3:
@@ -41,6 +40,7 @@ def generate_lib_pages (name, nameC, category, categoryC):
     templateFile.close()
     
     template = template.replace('[REPLACE_NAME_TEXT]', nameC)
+    template = template.replace('[REPLACE_TYPE_TEXT]', categoryC)
     template = template.replace('[REPLACE_STAMP_LIST]', pageContent)
 
     # write page
@@ -55,7 +55,12 @@ if __name__ == '__main__':
         {'name':'2d', 'nameC':'贰圆'},
         {'name':'5d', 'nameC':'伍圆'},
     ]
+    categories = [
+        {'category':'mint', 'categoryC':'新票'},
+        {'category':'used', 'categoryC':'旧票'},
+    ]
 
     for stamp in stamps:
-        generate_lib_pages (stamp['name'], stamp['nameC'])
+        for category in categories:
+            generate_lib_pages (stamp['name'], stamp['nameC'], category['category'], category['categoryC'])
 
