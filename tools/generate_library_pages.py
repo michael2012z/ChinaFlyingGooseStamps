@@ -10,8 +10,8 @@ def generate_lib_pages (name, nameC, category, categoryC):
     categoryDir = '../' + name + '/library/' + category
     srcDir = categoryDir + '/src/'
     srcUrlDir = category + '/src/'
-    snpDir = categoryDir + '/m_size/'
-    snpUrlDir = category + '/m_size/'
+    snpDir = categoryDir + '/snp/'
+    snpUrlDir = category + '/snp/'
     imageFiles = os.listdir(srcDir)
     imageFiles.sort()
     for imageFile in imageFiles[::-1]:
