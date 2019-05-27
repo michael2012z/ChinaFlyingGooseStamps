@@ -3,37 +3,33 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 
 
-'''
-[
-  { "id" = 1,
-    "flawlist" = [
-      {"type" = "dot", "x" = x, "y" = y, "desc" = 'xxxxxx'},
-      {"type" = "line", "x1" = x1, "y1" = y1, "x2" = x2, "y2" = y2, "desc" = 'xxxxxx'},
-    ]
-  },
-]
-'''
 
 def parse_statistics (filename):
-    allRecords = []
+    '''
+    Parse statistics for one stamp.
+    The result would be 
+    { "id" = 1,
+      "flawlist" = [
+        {"type" = "dot", "x" = x, "y" = y, "desc" = 'xxxxxx'},
+        {"type" = "line", "x1" = x1, "y1" = y1, "x2" = x2, "y2" = y2, "desc" = 'xxxxxx'},
+        ......
+      ]
+    }
+'''
     record = {"id":0, "flawlist":[]}
     flawList = []
     f = open(filename)
     lines = f.readlines()
+    f.close()
+
     for line in lines:
         line = line.strip()
         if line == "":
-            if record["id"] <> 0:
-                record["flawlist"] = flawList
-                flawList = []
-                allRecords.append(record)
-                record = {"id":0, "flawlist":[]}
-            else:
-                continue
+            continue
         elif line[0] == "$":
             # this line is comments
             # print "[comments:]" + line[1:]
-            _ = 0
+            continue
         elif line[0] == "%":
             # this line is new stamp index
             stampID = line[1:]
@@ -49,24 +45,27 @@ def parse_statistics (filename):
                 x1, y1 = coord.split("-")[0].split(",")[0], coord.split("-")[0].split(",")[1]
                 x2, y2 = coord.split("-")[1].split(",")[0], coord.split("-")[1].split(",")[1]
                 x1, y1, x2, y2 = float(x1),float(y1),float(x2), float(y2)
-                flawList.append({"type":"line", "x1":x1, "y1":y1, "x2":x2, "y2":y2, "desc" : desc})
+                record["flawList"].append({"type":"line", "x1":x1, "y1":y1, "x2":x2, "y2":y2, "desc" : desc})
                 # print "line: " + str([x1, y1, x2, y2]) + ": " + desc
             else:
                 # this is a dot
                 x, y = coord.split(",")[0], coord.split(",")[1]
                 x, y = float(x), float(y)
-                flawList.append({"type":"dot", "x":x, "y":y, "desc": desc})
+                record["flawList"].append({"type":"dot", "x":x, "y":y, "desc": desc})
                 # print "dot: " + str([x, y]) + ": " + desc
         elif line[0] == "&":
             # this line is text
             # print "[text]: " + line
-            _ = 0
+            continue
         else:
             print "[unknown]: " + line
 
-    f.close()
 
-    return allRecords
+    return record
+
+
+###############################################
+
 
 
 '''-----------------------------------------------------------'''
@@ -146,20 +145,11 @@ def physicalLocation(x, y):
     yy = float(y)/imageHeight * stampHeight
     return round(xx, 2), round(yy, 2)
 
-'''
-$ comments start with $
-$ stamp start with %
-$ flaw start with #
-$ text start with &
-$ flaw description follows |
-'''
-
-# pageInfo structure: [ id, title, [big picture, small picture], text, [flaw list, ...], [case list, ...]]
 
 def generateModel(record, name):
     stampID = record['id']
-    im = Image.open('../' + name + '/flaw/model/base/model_' + name + '.png')
-    imS = Image.open('../' + name + '/flaw/model/base/model_' + name + '.png')
+    im = Image.open('../' + name + '/flaw/util/model/base/model_' + name + '.png')
+    imS = Image.open('../' + name + '/flaw/util/model/base/model_' + name + '.png')
     draw = ImageDraw.Draw(im)
     drawS = ImageDraw.Draw(imS)
     serial = 0
@@ -175,8 +165,8 @@ def generateModel(record, name):
             x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
             markFlawLine(draw, x1, y1, x2, y2, serial)
             markFlawPointS(drawS, 1.0*(x1+x2)/2, 1.0*(y1+y2)/2)
-    bigPicName = '../' + name + '/flaw/model/generated/model_' + name + '_' + str(stampID/10) + str(stampID%10) + '.png'
-    litPicName = '../' + name + '/flaw/model/generated/model_' + name + '_' + str(stampID/10) + str(stampID%10) + '_s.png'
+    bigPicName = '../' + name + '/flaw/' + ('%02d' % (stampID)) + '/model.png'
+    litPicName = '../' + name + '/flaw/' + ('%02d' % (stampID)) + '/model_s.png'
     im.save(bigPicName, 'png')
     tmpW, tmpH = imS.size
     tmpW /= 2
@@ -276,19 +266,42 @@ def generateIndexPage(name, nameC):
     
     return
 
-    
+
+
+def generateModelForStamp(name):
+    for i in range(1, 49):
+        flawRecord = parse_statistics('../' + name + '/flaw/' + ('%02d' % (i+1)) + '/data.txt')
+        generateModel(flawRecord, name)
+    return
+
+def generateWikiPagesForStampId(name, nameC, id):
+    return
+
+def generateHtmlPagesForStampId(name, nameC, id):
+    return
+
+def generateWikiPagesForStamp(name, nameC):
+    return
+
+def generateHtmlPagesForStamp(name, nameC):
+    return
 
 
 
-
-def generate_wiki_pages_for_stamp(name, nameC, id)
-
+def generateAllForStamp(name, nameC):
+    generateModelForStamp(name)
+    generateWikiPagesForStamp(name, nameC)
+    generateHtmlPagesForStamp(name, nameC)
+    return
 
 
 if __name__ == '__main__':
     stamps = [
         {'name':'1d', 'nameC':'壹圆'},
     ]
+    for stamp in stamps:
+        generateAllForStamp(name, nameC)
+    
     for stamp in stamps:
         allRecords = parse_statistics('../' + stamp['name'] + '/flaw/statistic/statistic_' + stamp['name'] + '.txt')
         for record in allRecords:
