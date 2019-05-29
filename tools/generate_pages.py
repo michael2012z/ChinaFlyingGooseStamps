@@ -3,7 +3,6 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 
 
-
 def parse_statistics (filename):
     '''
     Parse statistics for one stamp.
@@ -59,12 +58,7 @@ def parse_statistics (filename):
         else:
             print "[unknown]: " + line
 
-
     return record
-
-
-###############################################
-
 
 
 '''-----------------------------------------------------------'''
@@ -168,13 +162,33 @@ def generateModel(record, name):
     imS = imS.resize((tmpW, tmpH), Image.ANTIALIAS)
     imS.save(litPicName, 'png')
 
-'''-----------------------------------------------------------
 
 def physicalLocation(x, y):
     xx = float(x)/imageWidth * stampWidth
     yy = float(y)/imageHeight * stampHeight
     return round(xx, 2), round(yy, 2)
-    
+ 
+def logicalFlawListToPhysicalFlawList(logicalFlawList):
+    physicalFlawList = []
+    for flaw in logicalFlawList:
+        location = ''
+        if flaw['type'] == "dot":
+            x, y = flaw['x'], flaw['y']
+            x, y, XXX, YYY = normalize(x, y)
+            xInStamp, yInStamp = physicalLocation(x, y)
+            location = "(" + str(xInStamp) + "mm, " + str(yInStamp) + "mm)"
+        elif flaw['type'] == "line":
+            x1, y1, x2, y2 = flaw['x1'], flaw['y1'], flaw['x2'], flaw['y2']
+            x1, y1, x2, y2 = normalize(x1, y1, x2, y2)
+            x1InStamp, y1InStamp = physicalLocation(x1, y1)
+            x2InStamp, y2InStamp = physicalLocation(x2, y2)
+            location = "(" + str(x1InStamp) + "mm, " + str(y1InStamp) + "mm) - (" + str(x2InStamp) + "mm, " + str(y2InStamp) + "mm)"
+        physicalFlawList.append(location + " : " + flaw['desc'])
+    return physicalFlawList
+
+'''-----------------------------------------------------------
+
+   
 def generateFlawPage(record, name, nameC):
     stampID = record['id']
     templateFile = open('page_templates/flaw_page_template.html')
@@ -275,21 +289,57 @@ def generateModelForStamp(name):
     return
 
 def generateWikiPagesForStampId(name, nameC, id):
+    flawRecord = parse_statistics('../' + name + '/flaw/' + ('%02d' % id) + '/data.txt')
+    flawRecord['id'] = id
+    flawList = logicalFlawListToPhysicalFlawList(flawRecord['flawList'])
+
+    # load template
+    templateFile = open('page_templates/flaw_wiki_page_template.md')
+    template = templateFile.read()
+    templateFile.close()
+
+    # replace template
+    template = template.replace('[REPLACE_NAME_TEXT]', nameC)
+    template = template.replace('[REPLACE_ID]', str(id))
+
+    # make flaw list
+    flawListStr = ''
+    for flaw in flawList:
+        flawListStr += "1. " + flaw + '\n'
+    template = template.replace('[REPLACE_FLAW_LIST]', flawListStr)
+
+    # make example list
+    exampleList = ''
+    exampleDir = '../' + name + '/flaw/' + ('%02d' % id) + '/'
+    if os.path.exists(exampleDir):
+        tmpList = os.listdir(exampleDir)
+        tmpList.sort()
+        serial = 0
+        for example in tmpList:
+            if example.find(".jpg") > 0:
+                exampleList += '<img src="' + example + '" height=250/>\n'
+    template = template.replace('[REPLACE_EXAMPLE_LIST]', exampleList)
+
+    # write page
+    f = open ('../' + name + '/flaw/' + ('%02d' % id) + '/README.md', 'w')
+    f.write(template)
+    f.close()
     return
 
 def generateHtmlPagesForStampId(name, nameC, id):
     return
 
 def generateWikiPagesForStamp(name, nameC):
+    for i in range(1, 49):
+        print("generating wiki page for stamp %s, id %d" % (name, i))
+        generateWikiPagesForStampId(name, nameC, i)
     return
 
 def generateHtmlPagesForStamp(name, nameC):
     return
 
-
-
 def generateAllForStamp(name, nameC):
-    generateModelForStamp(name)
+    #generateModelForStamp(name)
     generateWikiPagesForStamp(name, nameC)
     generateHtmlPagesForStamp(name, nameC)
     return
