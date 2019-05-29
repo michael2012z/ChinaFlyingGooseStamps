@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#19)
 
-## 模型
-<img src="model.png" height=450/> <img src="sampling.png" height=450/>
+## 样本与模型
+<img src="sampling.png" height=480/> <img src="model.png" height=480/>
 
 ## 缺陷列表
 1. (20.0mm, 2.25mm) :  汉字国铭字带内部靠近右上角处有反向的长斜点，右上方似分叉。

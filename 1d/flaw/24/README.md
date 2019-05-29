@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#24)
 
-## 模型
-<img src="model.png" height=450/> <img src="sampling.png" height=450/>
+## 样本与模型
+<img src="sampling.png" height=480/> <img src="model.png" height=480/>
 
 ## 缺陷列表
 1. (17.0mm, 0.88mm) :  大字左上方外边框线外侧有紧邻的三个点横向排列，其中中间一个较大，两边的较小。

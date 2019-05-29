@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#39)
 
-## 模型
-<img src="model.png" height=450/> <img src="sampling.png" height=450/>
+## 样本与模型
+<img src="sampling.png" height=480/> <img src="model.png" height=480/>
 
 ## 缺陷列表
 1. (4.0mm, 0.13mm) :  政字上方外边框线外有小点，距线比较远，往往被齿孔打掉。

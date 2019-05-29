@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#12)
 
-## 模型
-<img src="model.png" height=450/> <img src="sampling.png" height=450/>
+## 样本与模型
+<img src="sampling.png" height=480/> <img src="model.png" height=480/>
 
 ## 缺陷列表
 1. (13.5mm, 17.5mm) :  国铭R字母上方圆环内边界线外侧有斜点。

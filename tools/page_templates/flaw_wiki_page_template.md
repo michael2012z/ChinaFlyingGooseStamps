@@ -1,6 +1,6 @@
 # 大清飞雁[REPLACE_NAME_TEXT]邮票印刷缺陷 (#[REPLACE_ID])
 
-## 模型
+## 样本与模型
 [REPLACE_MODEL]
 
 ## 缺陷列表

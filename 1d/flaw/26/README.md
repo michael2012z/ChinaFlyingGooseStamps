@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#26)
 
-## 模型
-<img src="model.png" height=450/> <img src="sampling.png" height=450/>
+## 样本与模型
+<img src="sampling.png" height=480/> <img src="model.png" height=480/>
 
 ## 缺陷列表
 1. (11.75mm, 4.25mm) - (12.75mm, 3.5mm) :  国字右下角有一条反向斜线。

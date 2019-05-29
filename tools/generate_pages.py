@@ -303,8 +303,8 @@ def generateWikiPagesForStampId(name, nameC, id):
     template = template.replace('[REPLACE_ID]', str(id))
 
     # replace model
-    modelList = '<img src="model.png" height=450/> '
-    modelList += '<img src="sampling.png" height=450/>'
+    modelList = '<img src="sampling.png" height=480/> '
+    modelList += '<img src="model.png" height=480/>'
     template = template.replace('[REPLACE_MODEL]', modelList)
     
     # make flaw list

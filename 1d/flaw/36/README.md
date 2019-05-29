@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#36)
 
-## 模型
-<img src="model.png" height=450/> <img src="sampling.png" height=450/>
+## 样本与模型
+<img src="sampling.png" height=480/> <img src="model.png" height=480/>
 
 ## 缺陷列表
 1. (0.0mm, 0.5mm) :  邮票左上角临近边界处有黄色的两个点，虽然离外边框线左上角的距离在各实例上不相同，但是与黄颜色背景图案的相对位置稳定，所以可断定为背景印版上的缺陷。
