@@ -322,7 +322,7 @@ def generateWikiPagesForStampId(name, nameC, id):
         serial = 0
         for example in tmpList:
             if example.find(".jpg") > 0:
-                exampleList += '<img src="' + example + '" height=250/>'
+                exampleList += '<img src="' + example + '" height=220/> '
     exampleList += "\n"
     template = template.replace('[REPLACE_EXAMPLE_LIST]', exampleList)
 
