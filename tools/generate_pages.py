@@ -9,15 +9,14 @@ def parse_statistics (filename):
     Parse statistics for one stamp.
     The result would be 
     { "id" = 1,
-      "flawlist" = [
+      "flawList" = [
         {"type" = "dot", "x" = x, "y" = y, "desc" = 'xxxxxx'},
         {"type" = "line", "x1" = x1, "y1" = y1, "x2" = x2, "y2" = y2, "desc" = 'xxxxxx'},
         ......
       ]
     }
-'''
-    record = {"id":0, "flawlist":[]}
-    flawList = []
+    '''
+    record = {"id":0, "flawList":[]}
     f = open(filename)
     lines = f.readlines()
     f.close()
@@ -140,11 +139,6 @@ def normalize(x1, y1, x2=0, y2=0):
     yy2 = float(y2)/51 * imageHeight
     return xx1, yy1, xx2, yy2
 
-def physicalLocation(x, y):
-    xx = float(x)/imageWidth * stampWidth
-    yy = float(y)/imageHeight * stampHeight
-    return round(xx, 2), round(yy, 2)
-
 
 def generateModel(record, name):
     stampID = record['id']
@@ -153,7 +147,7 @@ def generateModel(record, name):
     draw = ImageDraw.Draw(im)
     drawS = ImageDraw.Draw(imS)
     serial = 0
-    for flaw in record['flawlist']:
+    for flaw in record['flawList']:
         serial += 1
         if flaw['type'] == "dot":
             x, y = flaw['x'], flaw['y']
@@ -174,8 +168,12 @@ def generateModel(record, name):
     imS = imS.resize((tmpW, tmpH), Image.ANTIALIAS)
     imS.save(litPicName, 'png')
 
-'''-----------------------------------------------------------'''
+'''-----------------------------------------------------------
 
+def physicalLocation(x, y):
+    xx = float(x)/imageWidth * stampWidth
+    yy = float(y)/imageHeight * stampHeight
+    return round(xx, 2), round(yy, 2)
     
 def generateFlawPage(record, name, nameC):
     stampID = record['id']
@@ -190,7 +188,7 @@ def generateFlawPage(record, name, nameC):
     
     # flaw list
     flawList = ""
-    for flaw in record['flawlist']:
+    for flaw in record['flawList']:
         location = ''
         if flaw['type'] == "dot":
             x, y = flaw['x'], flaw['y']
@@ -266,11 +264,13 @@ def generateIndexPage(name, nameC):
     
     return
 
+'''
 
 
 def generateModelForStamp(name):
     for i in range(1, 49):
-        flawRecord = parse_statistics('../' + name + '/flaw/' + ('%02d' % (i+1)) + '/data.txt')
+        flawRecord = parse_statistics('../' + name + '/flaw/' + ('%02d' % i) + '/data.txt')
+        flawRecord['id'] = i
         generateModel(flawRecord, name)
     return
 
@@ -300,8 +300,9 @@ if __name__ == '__main__':
         {'name':'1d', 'nameC':'壹圆'},
     ]
     for stamp in stamps:
-        generateAllForStamp(name, nameC)
-    
+        generateAllForStamp(stamp['name'], stamp['nameC'])
+        
+    '''
     for stamp in stamps:
         allRecords = parse_statistics('../' + stamp['name'] + '/flaw/statistic/statistic_' + stamp['name'] + '.txt')
         for record in allRecords:
@@ -310,3 +311,5 @@ if __name__ == '__main__':
             generateFlawPage (record, stamp['name'], stamp['nameC'])
         print 'generating index pages'
         generateIndexPage (stamp['name'], stamp['nameC'])
+    '''
+    
