@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#36)
 
 ## 模型
-[REPLACE_MODEL]
+<img src="model.png" height=450/> <img src="sampling.png" height=450/>
 
 ## 缺陷列表
 1. (0.0mm, 0.5mm) :  邮票左上角临近边界处有黄色的两个点，虽然离外边框线左上角的距离在各实例上不相同，但是与黄颜色背景图案的相对位置稳定，所以可断定为背景印版上的缺陷。
@@ -12,7 +12,7 @@
 
 
 ## 实例
-<img src="1d_35_36.jpg" height=250/> <img src="2008-04-23_00006217008A.jpg" height=250/> <img src="2010-02-26_00031508019A.jpg" height=250/> <img src="2011-08-13_00047901078A.jpg" height=250/> <img src="2012-11-12_00074219069A.jpg" height=250/> <img src="2013-05-04_00107494003A.jpg" height=250/> <img src="2013-07-19_00117759011A.jpg" height=250/> <img src="2013-09-15_00122486053A.jpg" height=250/> <img src="2014-01-22_00133999129A.jpg" height=250/> <img src="2014-10-17_00155656016A.jpg" height=250/> 
+<img src="1d_35_36.jpg" height=250/><img src="2008-04-23_00006217008A.jpg" height=250/><img src="2010-02-26_00031508019A.jpg" height=250/><img src="2011-08-13_00047901078A.jpg" height=250/><img src="2012-11-12_00074219069A.jpg" height=250/><img src="2013-05-04_00107494003A.jpg" height=250/><img src="2013-07-19_00117759011A.jpg" height=250/><img src="2013-09-15_00122486053A.jpg" height=250/><img src="2014-01-22_00133999129A.jpg" height=250/><img src="2014-10-17_00155656016A.jpg" height=250/>
 
 
 ## 描述

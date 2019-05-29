@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#40)
 
 ## 模型
-[REPLACE_MODEL]
+<img src="model.png" height=450/> <img src="sampling.png" height=450/>
 
 ## 缺陷列表
 1. (0.0mm, 3.5mm) :  汉字国铭字带左边外边框线外有小点，距线比较远，往往被齿孔打掉。
@@ -12,7 +12,7 @@
 
 
 ## 实例
-<img src="2009-03-10_00025383123A.jpg" height=250/> <img src="2009-06-27_00027219012A.jpg" height=250/> <img src="2012-05-02_00056750047A.jpg" height=250/> <img src="2013-03-01_00103174042A.jpg" height=250/> <img src="2013-04-29_00109476347A.jpg" height=250/> <img src="2014-03-03_00136540020A.jpg" height=250/> <img src="2014-07-27_00151343328A.jpg" height=250/> <img src="2016-07-11_00217837056A.jpg" height=250/> 
+<img src="2009-03-10_00025383123A.jpg" height=250/><img src="2009-06-27_00027219012A.jpg" height=250/><img src="2012-05-02_00056750047A.jpg" height=250/><img src="2013-03-01_00103174042A.jpg" height=250/><img src="2013-04-29_00109476347A.jpg" height=250/><img src="2014-03-03_00136540020A.jpg" height=250/><img src="2014-07-27_00151343328A.jpg" height=250/><img src="2016-07-11_00217837056A.jpg" height=250/>
 
 
 ## 描述

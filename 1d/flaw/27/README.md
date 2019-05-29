@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#27)
 
 ## 模型
-[REPLACE_MODEL]
+<img src="model.png" height=450/> <img src="sampling.png" height=450/>
 
 ## 缺陷列表
 1. (10.25mm, 17.5mm) :  圆环内边界线内侧，下方偏左处有反向长点，与云纹相交。

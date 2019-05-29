@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#8)
 
 ## 模型
-[REPLACE_MODEL]
+<img src="model.png" height=450/> <img src="sampling.png" height=450/>
 
 ## 缺陷列表
 1. (4.0mm, 2.38mm) :  政字正上方有小点。
@@ -12,7 +12,7 @@
 
 
 ## 实例
-<img src="2012-04-10_00059274040A.jpg" height=250/> <img src="2012-04-15_00057314013A.jpg" height=250/> <img src="2013-02-21_00102010013A.jpg" height=250/> <img src="2014-05-25_00146474004A.jpg" height=250/> <img src="2015-04-17_00173179010A.jpg" height=250/> <img src="2016-06-17_00215431088A.jpg" height=250/> 
+<img src="2012-04-10_00059274040A.jpg" height=250/><img src="2012-04-15_00057314013A.jpg" height=250/><img src="2013-02-21_00102010013A.jpg" height=250/><img src="2014-05-25_00146474004A.jpg" height=250/><img src="2015-04-17_00173179010A.jpg" height=250/><img src="2016-06-17_00215431088A.jpg" height=250/>
 
 
 ## 描述

@@ -298,10 +298,15 @@ def generateWikiPagesForStampId(name, nameC, id):
     template = templateFile.read()
     templateFile.close()
 
-    # replace template
+    # replace name
     template = template.replace('[REPLACE_NAME_TEXT]', nameC)
     template = template.replace('[REPLACE_ID]', str(id))
 
+    # replace model
+    modelList = '<img src="model.png" height=450/> '
+    modelList += '<img src="sampling.png" height=450/>'
+    template = template.replace('[REPLACE_MODEL]', modelList)
+    
     # make flaw list
     flawListStr = ''
     for flaw in flawList:
@@ -317,7 +322,7 @@ def generateWikiPagesForStampId(name, nameC, id):
         serial = 0
         for example in tmpList:
             if example.find(".jpg") > 0:
-                exampleList += '<img src="' + example + '" height=250/> '
+                exampleList += '<img src="' + example + '" height=250/>'
     exampleList += "\n"
     template = template.replace('[REPLACE_EXAMPLE_LIST]', exampleList)
 

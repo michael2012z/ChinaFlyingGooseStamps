@@ -1,7 +1,7 @@
 # 大清飞雁壹圆邮票印刷缺陷 (#24)
 
 ## 模型
-[REPLACE_MODEL]
+<img src="model.png" height=450/> <img src="sampling.png" height=450/>
 
 ## 缺陷列表
 1. (17.0mm, 0.88mm) :  大字左上方外边框线外侧有紧邻的三个点横向排列，其中中间一个较大，两边的较小。
@@ -14,7 +14,7 @@
 
 
 ## 实例
-<img src="2008-02-15_00005366065A.jpg" height=250/> <img src="2009-03-03_00025377122A.jpg" height=250/> <img src="2012-03-05_00055218007A.jpg" height=250/> <img src="2012-07-02_00063521046A.jpg" height=250/> <img src="2012-09-05_00069444028A.jpg" height=250/> <img src="2013-02-07_00102167012A.jpg" height=250/> <img src="2013-08-07_00119254089A.jpg" height=250/> <img src="2013-09-15_00122486052A.jpg" height=250/> <img src="2015-05-22_00177628041A.jpg" height=250/> 
+<img src="2008-02-15_00005366065A.jpg" height=250/><img src="2009-03-03_00025377122A.jpg" height=250/><img src="2012-03-05_00055218007A.jpg" height=250/><img src="2012-07-02_00063521046A.jpg" height=250/><img src="2012-09-05_00069444028A.jpg" height=250/><img src="2013-02-07_00102167012A.jpg" height=250/><img src="2013-08-07_00119254089A.jpg" height=250/><img src="2013-09-15_00122486052A.jpg" height=250/><img src="2015-05-22_00177628041A.jpg" height=250/>
 
 
 ## 描述
