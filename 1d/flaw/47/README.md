@@ -16,10 +16,7 @@
 
 
 ## 实例
-<img src="156291019A.jpg" height=250/>
-<img src="2014-01-22_00133999130A.jpg" height=250/>
-<img src="2014-09-12_00156291019A.jpg" height=250/>
-<img src="2015-12-06_00194888083A.jpg" height=250/>
+<img src="156291019A.jpg" height=250/> <img src="2014-01-22_00133999130A.jpg" height=250/> <img src="2014-09-12_00156291019A.jpg" height=250/> <img src="2015-12-06_00194888083A.jpg" height=250/> 
 
 
 ## 描述
